@@ -1,0 +1,30 @@
+#
+#* function dvdtst - tests if CD burned ok.
+function dvdtst(){
+echo "This is the \""$FUNCNAME"\" function in "$0" version "$version #debug
+lpdir=${var2/.iso/}
+echo "This step mounts "$var2" as subdirectory "$lpdir" and copies the directory to the file dskd"
+# lvd=$(du -h --max-depth=1 $lpdir |tr -d $lpdir |md5sum|rev | cut -c 3- |rev) 
+mkdir $lpdir; mount -o loop $var2 $lpdir # >/dev/null
+cd $lpdir; du -h --max-depth=1 > ../dskdir; cd ..
+# cd $lpdir
+echo "This step mounts the dvd as subdirectory dvd and copies the directory to the file dvddir"
+echo "put the "$var2" cd in to test"
+isoinfo -d -i /dev/cdrom
+# spause
+# mkdir dvd; mount /dev/dvd dvd
+mkdir dvd; mount /dev/cdrom dvd
+cd dvd; du -h --max-depth=1 > ../dvddir; cd ..
+echo "This step calculates the checksum"
+clear
+$(diff dskdir dvddir >/dev/null) || echo "something broke"
+$(diff dskdir dvddir >/dev/null) && echo "Copy compares OK"
+# spause
+echo "unmount and clean up"
+umount $lpdir ;rm -rf $lpdir
+umount "dvd" ;rm -rf "dvd"
+rm -rf dvd $lpdir
+eject /dev/cdrom
+} # Test:ocdg.sh dvdtst <filename.iso>
+#
+
