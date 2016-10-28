@@ -16,7 +16,7 @@ S=$PWD
 # Indexes LXF DVDs 
 # Mounts a DVD
 # Puts an ISO on a multiboot 
-version="0.009"
+version="0.010"
 #
 # location of iso images
 sd='/media/flint/Seagate Replica/lxfdvd'
