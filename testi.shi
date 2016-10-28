@@ -1,0 +1,56 @@
+#!/bin/bash
+# 08/06/2016 09:59:41 AM pflint
+# This is a general include file, and needs a shim to load it and run it correctly
+# The next line is the shim...
+bsm+=("${BASH_SOURCE[@]}") # add current source file to stack
+#
+#
+#* function summy - Tests dummy include in source file.
+function summy(){
+echo "This is the \""$FUNCNAME"\" function in "$0" version "$version #debug
+echo "this is from the file "$incf
+echo ${BASH_SOURCE[@]}
+} # Test:
+#
+#
+#* function ncounty - Lists all functions in any and all sources used.
+function ncounty(){
+echo "This is the \""$FUNCNAME"\" function in "$0" version "$version #debug
+echo "this is from the file "$incf
+#D echo ${FUNCNAME[$i]}
+#D  echo "This is what "${FUNCNAME[@]}
+#D  echo "This is the number of elements "${#FUNCNAME[@]}
+# get length of an array
+echo "These are the names of the current source files:"
+echo ${BASH_SOURCE[@]}
+#
+tLen=${#FUNCNAME[@]}
+# use for loop read all functions
+#D  for (( i=0; i<${tLen}; i++ ));
+#D  do
+#D   echo "File number "(( $i+1 ))", is "${FUNCNAME[$i]}
+#D  done
+#
+sLen=${#BASH_SOURCE[@]}
+for (( i=0; i<${sLen}; i++ ));
+do
+  echo "File number "$(( $i + 1 ))" is "${BASH_SOURCE[$i]}" The functions in this are:"
+  grep '^\#\*' ${BASH_SOURCE[$i]}
+done
+} # Test:
+#
+#* function county - Lists all functions in any and all sources used.
+function county(){
+# Go through our copy of the BASH_SOURCE array, and output lists of subroutines 
+bsa=$(echo "${bsm[@]}" | tr ' ' '\n' | sort -u | tr '\n' ' ')
+echo "The sorted array from main include bsa is = "${bsa[@]}
+	n=1
+#D echo  "${bsa[@]}" | tr ' ' '\n'|sed '/^$/d'; spause
+echo  "${bsa[@]}" | tr ' ' '\n' |sed '/^$/d' |while read line; do
+	echo ">> sub-script #"$n:" "$line 
+	n=$(( n+ 1 ))
+	# grep -H '^\#\*' $line; 
+	grep '^\#\*' $line; 
+done
+} # Test:
+

@@ -16,10 +16,8 @@ S=$PWD
 # Indexes LXF DVDs 
 # Mounts a DVD
 # Puts an ISO on a multiboot 
-version="0.009"
+version="0.008"
 #
-# location of iso images
-sd='/media/flint/Seagate Replica/lxfdvd'
 #
 #* function help  - Help function for template basic help goes here
 function help(){
@@ -29,20 +27,17 @@ cat $0 | grep '^## ' | sed -e 's/##//'
 # echo "This is the help function"
 ##                       *****DOCUMENTATION*****
 ## You get this when you put in the wrong number or type of arguments...
-## The name of this program is ctrantor.sh, a tool for managing trantor
-## a web server designed to serve out Linux Format DVDs.
-##      *** NOTE *** This program need not be run as root,
-##      *** BUT! *** Some components require root!
+## The name of this program is ctrantor.sh, a tool for managing trantor.
+## This is released under GPL dbtsI
 ## The syntax is:
-## OPERATION
-##  - ctrantor.sh diriso - Lists DVD images
-##  - ctrantor.sh web [on off] - Turn Web Server on or off 
-##  - ctrantor.sh [mount unmount] <FILENAME> - Mounts unmounts iso
-##    images from file
-##  - ctrantor.sh [dvd usb] <ISO NAME> - makes dvd or usb   
-##    in all of these, Output is delivered to the screen...
+## INSTALLATION
+##  - ctrantor.sh sane - Checks platform to  
+##    determine if all components are abailable  
+##    if root offers to install missing parts.  
+##  - ctrantor.sh setup <URL NAME> setup trantor  
+##    if root.  
 ## MAINTENANCE
-##  - ctrantor.sh newiso - Copies new DVD image
+##  - ctrantor.sh newiso - Copies new CD image
 ##    into repository  
 ##  - ctrantor.sh nuweb - builds new web site from files 
 ##  - ctrantor.sh impjpg [ISONAMEf.jpg ISONAMEb.jpg] - 
@@ -50,16 +45,18 @@ cat $0 | grep '^## ' | sed -e 's/##//'
 ##    (front or back) into repository  
 ##  - ctrantor.sh potrite - checks to see if all 
 ##    components are there and where they should be
-##  - ctrantor.sh county - Lists included scripts & functions 
-## INSTALLATION
-##  - ctrantor.sh sane - Checks platform to  
-##    determine if all components are abailable  
-##    if root offers to install missing parts.  
-##  - ctrantor.sh setup <URL NAME> setup trantor  
-##    if root.  
+## OPERATION
+##  - ctrantor.sh web [on off] - Turn Web Server on or off 
+##  - ctrantor.sh [mount unmount] <FILENAME> - Mounts unmounts iso
+##    images from file
+##  - ctrantor.sh [dvd usb] <ISO NAME> - makes dvd or usb   
+##    in all of these, Output is delivered to the screen...
+##      *** NOTE *** This program need not be run as root,
+##      *** BUT! *** Some components require root!
+##
+## For structure information type "grep '^\#\*' ctrantor.sh"
 ##    :^)
 ## (C) P Flint, Barre Open Systems Institute Liscensed under GPLI
-## This is released under GPL dbtsI
 ##
 } # Test:
 #
@@ -72,27 +69,28 @@ echo "This is the \""$FUNCNAME"\" function in "$0" version "$version #debug
 uroot
 } # Test:
 #
-#* function include - loads files with additioal functions not particularly a menu item.
+#* function include - loads files with additioal functions 
 function include(){
-#D echo "This is the \""$FUNCNAME"\" function in "$0" version "$version #debug
+#D 
+echo "This is the \""$FUNCNAME"\" function in "$0" version "$version #debug
 #D echo "This is the path "$S; 
 #D echo "This is \$0 "$0
 fname=$1
 #D echo "Include "$fname
-incp=""$(echo $0 |rev | cut -d"/" -f 2- |rev)"/"
+incp="./"$(echo $0 |rev | cut -d"/" -f 2- |rev)"/"
+#D 
+echo "This is the sourced file "$incf
 incf=$incp$fname
-#D echo "This is the sourced file "$incf
 source $incf
-bsm+=("${BASH_SOURCE[@]}") # add current source file to variable
-#D echo "The current bash source array is:"${bsm[@]}
 #D echo $incf
-#D echo ${BASH_SOURCE[@]}
+#D 
+echo ${BASH_SOURCE[@]}
 } # Test:
 #
-# This loads the next section of the code...
+#
+#D include ncdg.shi
+#D 
 include testi.shi
-include dvdio.shi
-#D echo "The current bash source array is:"${bsm[@]}
 #
 #* function mtdvd - Mounts DVD 
 function mtdvd(){
@@ -237,7 +235,7 @@ function usb(){
 echo "This is the \""$FUNCNAME"\" function in "$0" version "$version #debug
 uroot # check if you are root.
 #D isusb # figure out the usb device
-#D sd='/media/flint/Seagate Replica/lxfdvd'
+sd='/media/flint/Seagate Replica/lxfdvd'
 sfap="$sd""/"$var2".iso"
 echo "The source path and file is "$sfap
 #D 
@@ -321,7 +319,6 @@ if [ "$#" -eq "2" ] && [ "$1" = "unmount"  ]; then ARGS="2"; fi
 if [ "$#" -eq "1" ] && [ "$1" = "dvd"      ]; then ARGS="1"; fi
 if [ "$#" -eq "2" ] && [ "$1" = "usb"      ]; then ARGS="2"; fi
 if [ "$#" -eq "1" ] && [ "$1" = "include"  ]; then ARGS="1"; fi
-if [ "$#" -eq "1" ] && [ "$1" = "diriso"   ]; then ARGS="1"; fi
 if [ "$#" -eq "1" ] && [ "$1" = "summy"    ]; then ARGS="1"; fi
 if [ "$#" -eq "2" ] && [ "$1" = "tummy"    ]; then ARGS="2"; fi
 if [ "$#" -eq "1" ] && [ "$1" = "county"   ]; then ARGS="1"; fi

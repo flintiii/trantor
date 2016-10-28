@@ -1,0 +1,7 @@
+#
+#* function summy - Rename and fill stuff in between braces
+function summy(){
+echo "This is the \""$FUNCNAME"\" function in "$0" version "$version #debug
+echo "this is from the file "$incf
+} # Test:
+#
